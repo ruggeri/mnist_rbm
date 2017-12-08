@@ -16,6 +16,14 @@ def train_batch(session, rbm_graph, learning_rate_value):
         visible_values_pos,
     )
 
+    # TODO:
+    # (1) Originally I used the actual hidden samples and tried to
+    #     minimize -log p\tilde(v, h),
+    # (2) Then I used the hidden sample probabilities; I am not sure
+    #     that made any difference, but I should test.
+    # (3) Last (and presently) I totally ignore these values, and just
+    #     minimize -log p\tilde(v) marginalizing over all h. Again,
+    #     not sure if this is better, and doesn't seem to be CD...
     session.run(
         rbm_graph.train_op,
         feed_dict = {

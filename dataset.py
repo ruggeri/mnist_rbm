@@ -8,7 +8,7 @@ LABELED_TRAINING_SET_SIZE = int(
     config.LABELED_PERCENTAGE * mnist.train.images.shape[0]
 )
 
-print(f"Labeled Training Set Size: {LABELED_TRAINING_SET_SIZE}")
+print(f">>>Labeled Training Set Size: {LABELED_TRAINING_SET_SIZE}<<<")
 
 labeled_train_x, labeled_train_y = mnist.train.next_batch(
     LABELED_TRAINING_SET_SIZE
