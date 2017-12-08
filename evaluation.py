@@ -26,8 +26,8 @@ def sample_and_evaluate_lr(session, rbm_graph):
     )
 
     return evaluate_lr(
-        train_x = train_samples.hidden_values_pos,
+        train_x = train_samples.hidden_probs_pos,
         train_y = dataset.labeled_train_y,
-        test_x = test_samples.hidden_values_pos,
+        test_x = test_samples.hidden_probs_pos,
         test_y = dataset.test_y
     )

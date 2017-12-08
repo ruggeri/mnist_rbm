@@ -3,8 +3,10 @@ import numpy as np
 
 Samples = namedtuple(
     'Samples', [
+        'hidden_probs_pos',
         'hidden_values_pos',
         'visible_values_neg',
+        'hidden_probs_neg',
         'hidden_values_neg',
     ]
 )
@@ -43,7 +45,9 @@ def produce_samples(session, rbm_graph, visible_values_pos):
     )
 
     return Samples(
+        hidden_probs_pos = hidden_probs_pos,
         hidden_values_pos = hidden_values_pos,
         visible_values_neg = visible_values_neg,
+        hidden_probs_neg = hidden_probs_neg,
         hidden_values_neg = hidden_values_neg,
     )

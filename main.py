@@ -20,9 +20,9 @@ def train_batch(session, rbm_graph, learning_rate_value):
         rbm_graph.train_op,
         feed_dict = {
             rbm_graph.visible_units_pos: visible_values_pos,
-            rbm_graph.hidden_units_pos: samples.hidden_values_pos,
+            rbm_graph.hidden_units_pos: samples.hidden_probs_pos,
             rbm_graph.visible_units_neg: samples.visible_values_neg,
-            rbm_graph.hidden_units_neg: samples.hidden_values_neg,
+            rbm_graph.hidden_units_neg: samples.hidden_probs_neg,
             rbm_graph.learning_rate: learning_rate_value
         }
     )
