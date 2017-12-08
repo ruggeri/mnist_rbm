@@ -7,6 +7,7 @@ def evaluate_lr(train_x, train_y, test_x, test_y):
     lr = SGDClassifier(
 #        multi_class = 'multinomial',
 #        solver = 'newton-cg',
+        tol = 1e-3,
     )
     lr.fit(train_x, train_y)
     score = lr.score(test_x, test_y)

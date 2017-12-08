@@ -8,7 +8,7 @@ from evaluation import evaluate_lr, sample_and_evaluate_lr
 from rbm_graph import make_rbm_graph
 from sampling import produce_samples
 
-def train_batch(session, rbm_graph):
+def train_batch(session, rbm_graph, learning_rate_value):
     visible_values_pos = dataset.next_batch(config.BATCH_SIZE)
     samples = produce_samples(
         session,
@@ -23,6 +23,7 @@ def train_batch(session, rbm_graph):
             rbm_graph.hidden_units_pos: samples.hidden_values_pos,
             rbm_graph.visible_units_neg: samples.visible_values_neg,
             rbm_graph.hidden_units_neg: samples.hidden_values_neg,
+            rbm_graph.learning_rate: learning_rate_value
         }
     )
 
@@ -47,12 +48,15 @@ def run(session):
     lr_accuracy = sample_and_evaluate_lr(session, rbm_graph)
     print(f"Batch: {0} | LR Accuracy: {lr_accuracy}")
 
+    learning_rate_value = config.LEARNING_RATE
     for batch_idx in range(1, config.NUM_BATCHES):
-        train_batch(session, rbm_graph)
+        train_batch(session, rbm_graph, learning_rate_value)
 
         if batch_idx % config.BATCHES_PER_EVALUATION == 0:
             lr_accuracy = sample_and_evaluate_lr(session, rbm_graph)
             print(f"Batch: {batch_idx} | LR Accuracy: {lr_accuracy}")
+
+            learning_rate_value *= config.LEARNING_RATE_DECAY
 
 with tf.Session() as session:
     run(session)

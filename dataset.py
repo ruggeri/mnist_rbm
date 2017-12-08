@@ -1,12 +1,21 @@
+import config
 import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
 
 mnist = input_data.read_data_sets('MNIST_data', one_hot=True)
 
-# TODO: Here you can decide how much labeled training data you have.
+LABELED_TRAINING_SET_SIZE = int(
+    config.LABELED_PERCENTAGE * mnist.train.images.shape[0]
+)
+
+print(f"Labeled Training Set Size: {LABELED_TRAINING_SET_SIZE}")
+
+labeled_train_x, labeled_train_y = mnist.train.next_batch(
+    LABELED_TRAINING_SET_SIZE
+)
 labeled_train_x, labeled_train_y = (
-    np.around(mnist.train.images),
-    np.argmax(mnist.train.labels, axis = 1),
+    np.around(labeled_train_x),
+    np.argmax(labeled_train_y, axis = 1),
 )
 
 test_x, test_y = (

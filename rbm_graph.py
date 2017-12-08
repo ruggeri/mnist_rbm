@@ -15,6 +15,7 @@ RBMGraph = namedtuple(
         'hidden_units_neg',
         'energy_neg',
         'energy_diff',
+        'learning_rate',
         'train_op',
     ]
 )
@@ -83,8 +84,9 @@ def make_rbm_graph():
 
     energy_diff = tf.reduce_sum(energy_pos - energy_neg)
 
+    learning_rate = tf.placeholder(tf.float32, name = 'learning_rate')
     train_op = tf.train.AdamOptimizer(
-        learning_rate = config.LEARNING_RATE,
+        learning_rate = learning_rate
     ).minimize(energy_diff)
 
     return RBMGraph(
@@ -98,5 +100,6 @@ def make_rbm_graph():
         hidden_units_neg = hidden_units_neg,
         energy_neg = energy_neg,
         energy_diff = energy_diff,
+        learning_rate = learning_rate,
         train_op = train_op,
     )
