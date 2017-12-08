@@ -22,7 +22,7 @@ def produce_samples(session, rbm_graph, visible_values_pos):
     ])
 
     hidden_probs_pos = sigmoid(
-        visible_values_pos.dot(W) + hidden_bias
+        -(visible_values_pos.dot(W) + hidden_bias)
     )
     hidden_values_pos = np.random.binomial(
         1,
@@ -30,14 +30,14 @@ def produce_samples(session, rbm_graph, visible_values_pos):
     )
 
     visible_probs_neg = sigmoid(
-        hidden_values_pos.dot(W.T) + visible_bias
+        -(hidden_values_pos.dot(W.T) + visible_bias)
     )
     visible_values_neg = np.random.binomial(
         1,
         visible_probs_neg,
     )
     hidden_probs_neg = sigmoid(
-        visible_values_neg.dot(W) + hidden_bias
+        -(visible_values_neg.dot(W) + hidden_bias)
     )
     hidden_values_neg = np.random.binomial(
         1,

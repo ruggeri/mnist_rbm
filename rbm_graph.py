@@ -45,18 +45,14 @@ def make_rbm_graph():
     )
 
     energy_pos = (
-        tf.reduce_sum(visible_units_pos * visible_bias, axis = 1)
+        -tf.reduce_sum(visible_units_pos * visible_bias, axis = 1)
         +
         tf.reduce_sum(
-            (
-                tf.matmul(visible_units_pos, W)
-                *
-                hidden_units_pos
-            ),
-            axis = 1
+            tf.log_sigmoid(
+                -hidden_bias
+                -tf.matmul(visible_units_pos, W)
+            )
         )
-        +
-        tf.reduce_sum(hidden_units_pos * hidden_bias, axis = 1)
     )
 
     # Negative side.
@@ -68,18 +64,14 @@ def make_rbm_graph():
     )
 
     energy_neg = (
-        tf.reduce_sum(visible_units_neg * visible_bias, axis = 1)
+        -tf.reduce_sum(visible_units_neg * visible_bias, axis = 1)
         +
         tf.reduce_sum(
-            (
-                tf.matmul(visible_units_neg, W)
-                *
-                hidden_units_neg
-            ),
-            axis = 1
+            tf.log_sigmoid(
+                -hidden_bias
+                -tf.matmul(visible_units_neg, W)
+            )
         )
-        +
-        tf.reduce_sum(hidden_units_neg * hidden_bias, axis = 1)
     )
 
     energy_diff = tf.reduce_sum(energy_pos - energy_neg)
