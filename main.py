@@ -2,8 +2,14 @@ from collections import namedtuple
 import numpy as np
 import tensorflow as tf
 
+import config
+import dataset
+from evaluation import evaluate_lr, sample_and_evaluate_lr
+from rbm_graph import make_rbm_graph
+from sampling import produce_samples
+
 def train_batch(session, rbm_graph):
-    visible_values_pos = dataset.next_batch(BATCH_SIZE)
+    visible_values_pos = dataset.next_batch(config.BATCH_SIZE)
     samples = produce_samples(
         session,
         rbm_graph,
@@ -38,14 +44,14 @@ def run(session):
 
     # Interestingly, with random initialization LR accuracy is pretty
     # okay!
-    lr_accuracy = evaluate_lr(session, rbm_graph)
+    lr_accuracy = sample_and_evaluate_lr(session, rbm_graph)
     print(f"Batch: {0} | LR Accuracy: {lr_accuracy}")
 
-    for batch_idx in range(1, NUM_BATCHES):
+    for batch_idx in range(1, config.NUM_BATCHES):
         train_batch(session, rbm_graph)
 
-        if batch_idx % 100 == 0:
-            lr_accuracy = evaluate_lr(session, rbm_graph)
+        if batch_idx % config.BATCHES_PER_EVALUATION == 0:
+            lr_accuracy = sample_and_evaluate_lr(session, rbm_graph)
             print(f"Batch: {batch_idx} | LR Accuracy: {lr_accuracy}")
 
 with tf.Session() as session:

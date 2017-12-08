@@ -1,6 +1,8 @@
 from collections import namedtuple
 import tensorflow as tf
 
+import config
+
 RBMGraph = namedtuple(
     'RBMGraph', [
         'W',
@@ -19,23 +21,26 @@ RBMGraph = namedtuple(
 
 def make_rbm_graph():
     W = tf.Variable(
-        tf.truncated_normal([NUM_VISIBLE_UNITS, NUM_HIDDEN_UNITS]),
+        tf.truncated_normal([
+            config.NUM_VISIBLE_UNITS,
+            config.NUM_HIDDEN_UNITS
+        ]),
         name = 'W'
     )
 
     visible_bias = tf.Variable(
-        tf.zeros(NUM_VISIBLE_UNITS), name = 'visible_bias'
+        tf.zeros(config.NUM_VISIBLE_UNITS), name = 'visible_bias'
     )
     hidden_bias = tf.Variable(
-        tf.zeros(NUM_HIDDEN_UNITS), name = 'hidden_bias',
+        tf.zeros(config.NUM_HIDDEN_UNITS), name = 'hidden_bias',
     )
 
     # Positive side.
     visible_units_pos = tf.placeholder(
-        tf.float32, [None, NUM_VISIBLE_UNITS]
+        tf.float32, [None, config.NUM_VISIBLE_UNITS]
     )
     hidden_units_pos = tf.placeholder(
-        tf.float32, [None, NUM_HIDDEN_UNITS]
+        tf.float32, [None, config.NUM_HIDDEN_UNITS]
     )
 
     energy_pos = (
@@ -55,10 +60,10 @@ def make_rbm_graph():
 
     # Negative side.
     visible_units_neg = tf.placeholder(
-        tf.float32, [None, NUM_VISIBLE_UNITS]
+        tf.float32, [None, config.NUM_VISIBLE_UNITS]
     )
     hidden_units_neg = tf.placeholder(
-        tf.float32, [None, NUM_HIDDEN_UNITS]
+        tf.float32, [None, config.NUM_HIDDEN_UNITS]
     )
 
     energy_neg = (
@@ -79,7 +84,7 @@ def make_rbm_graph():
     energy_diff = tf.reduce_sum(energy_pos - energy_neg)
 
     train_op = tf.train.AdamOptimizer(
-        learning_rate = LEARNING_RATE,
+        learning_rate = config.LEARNING_RATE,
     ).minimize(energy_diff)
 
     return RBMGraph(
